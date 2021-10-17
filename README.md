@@ -1,2 +1,2 @@
 # JetNotes
-Kotlin's Homework
+My homework in Kotlin
