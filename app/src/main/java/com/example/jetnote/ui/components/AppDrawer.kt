@@ -2,22 +2,23 @@ package com.example.jetnote.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jetnote.routing.JetNotesRouter
 import com.example.jetnote.routing.Screen
-import com.example.jetnote.theme.JetNotesTheme
 import com.example.jetnote.theme.JetNotesThemeSettings
 
 @Composable
@@ -89,24 +90,35 @@ private fun ScreenNavigationButton(
 @Composable
 
 private fun LightDarkThemeItem() {
-    Row {
-        Text(
-            text = "Turn on dark theme",
-            style = MaterialTheme.typography.body2,
-            color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-                .align(alignment = Alignment.CenterVertically)
-        )
+    var statusDarkThemeDevice: Boolean = isSystemInDarkTheme()
+    var statusDarkThemeApp: String = if (JetNotesThemeSettings.isDarkThemeEnabled) "off" else "on"
+    Column {
+        Row {
+            Text(
+                text = "Turn $statusDarkThemeApp dark theme",
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+                    .align(alignment = Alignment.CenterVertically)
+            )
 
-        Switch(
-            checked = JetNotesThemeSettings.isDarkThemeEnabled,
-            onCheckedChange = { JetNotesThemeSettings.isDarkThemeEnabled = it },
-            modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .align(alignment = Alignment.CenterVertically)
-        )
+            Switch(
+                checked = JetNotesThemeSettings.isDarkThemeEnabled,
+                onCheckedChange = { JetNotesThemeSettings.isDarkThemeEnabled = it },
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .align(alignment = Alignment.CenterVertically),
+                enabled = !statusDarkThemeDevice
+            )
+        }
+        if (statusDarkThemeDevice){
+            Row {
+                Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning change dark mode", tint = Color.Red)
+                Text(text = "Can't change dark mode because this device's dark mode is ON", color = Color.Red)
+            }
+        }
     }
 }
 
@@ -144,10 +156,10 @@ fun AppDrawer(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun AppDrawerPreview() {
-    JetNotesTheme {
-        AppDrawer(Screen.Notes, {})
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun AppDrawerPreview() {
+//    JetNotesTheme {
+//        AppDrawer(Screen.Notes, {})
+//    }
+//}

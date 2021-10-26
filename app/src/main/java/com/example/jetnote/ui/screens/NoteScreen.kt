@@ -19,6 +19,7 @@ import com.example.jetnote.ui.components.TopAppBar
 import com.example.jetnote.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
+@ExperimentalMaterialApi
 @Composable
 private fun NotesList(
     notes: List<NoteModel>,
@@ -31,12 +32,13 @@ private fun NotesList(
             Note(
                 note = note,
                 onNoteCheckedChange = onNoteCheckedChange,
-                onNoteClick = onNoteClick,
+                onNoteClick = onNoteClick
             )
         }
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 fun NotesScreen(viewModel: MainViewModel) {
     val notes: List<NoteModel> by viewModel
@@ -103,6 +105,7 @@ fun NotesScreen(viewModel: MainViewModel) {
     )
 }
 
+@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 private fun NotesListPreview() {

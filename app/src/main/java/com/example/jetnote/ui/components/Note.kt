@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,12 +21,15 @@ import androidx.compose.ui.unit.sp
 import com.example.jetnote.domain.model.NoteModel
 import com.example.jetnote.util.fromHex
 
+@ExperimentalMaterialApi
 @Composable
 fun Note(
     note: NoteModel,
-    onNoteCheckedChange: (NoteModel) -> Unit,
-    onNoteClick: (NoteModel) -> Unit,
+    onNoteCheckedChange: (NoteModel) -> Unit = {},
+    onNoteClick: (NoteModel) -> Unit = {},
+    isSelected: Boolean = false
 ) {
+    val background = if (isSelected) Color.LightGray else MaterialTheme.colors.surface
     val backgroundShape: Shape = RoundedCornerShape(4.dp)
 
     Row(
@@ -33,7 +38,10 @@ fun Note(
             .shadow(1.dp, backgroundShape)
             .fillMaxWidth()
             .heightIn(min = 64.dp)
-            .background(Color.White, backgroundShape)
+            .background(color = background, shape = backgroundShape)
+            .clickable {
+                onNoteClick.invoke(note)
+            }
     ) {
         NoteColor(
             modifier = Modifier
@@ -50,7 +58,6 @@ fun Note(
         ) {
             Text(
                 text = note.title, maxLines = 1,
-                color = Color.Black,
                 style = TextStyle(
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp,
@@ -59,7 +66,6 @@ fun Note(
             )
             Text(
                 text = note.content, maxLines = 1,
-                color = Color.Black.copy(alpha = 0.75f),
                 style = TextStyle(
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp,
@@ -78,7 +84,7 @@ fun Note(
                     .padding(end = 8.dp)
                     .align(Alignment.CenterVertically),
 
-            )
+                )
         }
     }
 }
